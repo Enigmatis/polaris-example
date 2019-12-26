@@ -6,7 +6,7 @@ export const typeDefs = `
 
     type Mutation{
         createBook(title: String!, authorId: String!): Book
-        updateBook(title: String!, newTitle: String!): Book
+        updateBook(title: String!, newTitle: String!): Boolean
     }
     
     type Book implements RepositoryEntity {
