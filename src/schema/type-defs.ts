@@ -1,8 +1,11 @@
-export const typeDefs = `
+import {gql} from '@enigmatis/polaris-core';
+
+export const typeDefs = gql`
     type Query {
         allBooks: [Book]!
         booksByPartialTitle(title: String!): [Book]!
         allAuthors: [Author]!
+        node(id: String!): Node
     }
 
     type Mutation {
@@ -35,5 +38,22 @@ export const typeDefs = `
         lastName: String
         fullName: String
         books: [Book]
+    }
+
+    interface Node {
+        id: String!
+    }
+
+    type Article implements RepositoryEntity & Node {
+        id: String!
+        deleted: Boolean!
+        createdBy: String!
+        creationTime: DateTime!
+        lastUpdatedBy: String
+        lastUpdateTime: DateTime
+        realityId: Int!
+        headline: String
+        text: String
+        author: Author
     }
 `;

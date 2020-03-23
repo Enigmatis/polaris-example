@@ -1,5 +1,5 @@
-import * as express from "express";
-import {getPolarisConnectionManager} from "@enigmatis/polaris-core";
+import * as express from 'express';
+import {getPolarisConnectionManager} from '@enigmatis/polaris-core';
 
 export const healthCheck = async (req: express.Request, res: express.Response): Promise<void> => {
     try {

@@ -1,5 +1,5 @@
-import {Column, CommonModel, Entity, OneToMany, PrimaryGeneratedColumn} from "@enigmatis/polaris-core";
-import {Book} from "./book";
+import {Column, CommonModel, Entity, OneToMany, PrimaryGeneratedColumn} from '@enigmatis/polaris-core';
+import {Book} from './book';
 
 @Entity()
 export class Author extends CommonModel {
@@ -9,7 +9,7 @@ export class Author extends CommonModel {
     public lastName: string;
     @OneToMany(() => Book, (book) => book.author)
     public books: Book[];
-    @PrimaryGeneratedColumn("uuid")
+    @PrimaryGeneratedColumn('uuid')
     protected id!: string;
 
     public constructor(firstName: string, lastName: string, books: Book[]) {

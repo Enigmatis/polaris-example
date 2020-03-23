@@ -1,7 +1,7 @@
-import {getPolarisConnectionManager, Like, PolarisError, PolarisGraphQLContext} from "@enigmatis/polaris-core"
-import {Book} from "../dal/entities/book";
-import {Author} from "../dal/entities/author";
-import {polarisGraphQLLogger} from "../utils/logger";
+import {getPolarisConnectionManager, Like, PolarisError, PolarisGraphQLContext} from '@enigmatis/polaris-core'
+import {Book} from '../dal/entities/book';
+import {Author} from '../dal/entities/author';
+import {polarisGraphQLLogger} from '../utils/logger';
 
 export const resolvers = {
     Query: {
@@ -11,7 +11,7 @@ export const resolvers = {
             context: PolarisGraphQLContext
         ): Promise<Book[]> => {
             const connection = getPolarisConnectionManager().get();
-            polarisGraphQLLogger.debug("I'm the resolver of all books", context);
+            polarisGraphQLLogger.debug('I am the resolver of all books', context);
             return connection.getRepository(Book).find(context, {relations: ['author']});
         },
         booksByPartialTitle: (
@@ -50,7 +50,7 @@ export const resolvers = {
                 await bookRepo.save(context, newBook);
                 return newBook;
             } else {
-                throw new PolarisError("Could not find author with the requested id!", 400);
+                throw new PolarisError('Could not find author with the requested id!', 400);
             }
         },
         updateBook: async (
@@ -69,7 +69,7 @@ export const resolvers = {
                 await bookRepo.update(context, bookToUpdate.getId(), {title: args.newTitle});
                 return bookToUpdate;
             } else {
-                throw new PolarisError("Could not find book with the requested id!", 400);
+                throw new PolarisError('Could not find book with the requested id!', 400);
             }
         },
         deleteBook: async (
@@ -87,7 +87,7 @@ export const resolvers = {
                 await bookRepo.delete(context, bookToDelete.getId());
                 return bookToDelete;
             } else {
-                throw new PolarisError("Could not find book with the requested id!", 400);
+                throw new PolarisError('Could not find book with the requested id!', 400);
             }
         },
     },

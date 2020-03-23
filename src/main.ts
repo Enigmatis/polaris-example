@@ -1,11 +1,11 @@
-import {app, getPolarisConnectionManager, PolarisServer} from "@enigmatis/polaris-core";
-import {typeDefs} from "./schema/type-defs";
-import {resolvers} from "./schema/resolvers";
-import * as polarisProperties from "../resources/polaris-properties.json";
-import {initConnection} from "./dal/connection-manager";
-import {initializeDatabase} from "./dal/data-initalizer";
-import {realitiesHolder} from "./utils/realities-holder";
-import {healthCheck} from "./utils/health-check";
+import {app, getPolarisConnectionManager, PolarisServer} from '@enigmatis/polaris-core';
+import {typeDefs} from './schema/type-defs';
+import {resolvers} from './schema/resolvers';
+import * as polarisProperties from '../resources/polaris-properties.json';
+import {initConnection} from './dal/connection-manager';
+import {initializeDatabase} from './dal/data-initalizer';
+import {realitiesHolder} from './utils/realities-holder';
+import {healthCheck} from './utils/health-check';
 
 let server: PolarisServer;
 
