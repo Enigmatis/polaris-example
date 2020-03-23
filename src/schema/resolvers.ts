@@ -1,7 +1,45 @@
 import {getPolarisConnectionManager, Like, PolarisError, PolarisGraphQLContext} from '@enigmatis/polaris-core'
+import {connectionDefinitions, fromGlobalId, globalIdField, nodeDefinitions} from 'graphql-relay';
 import {Book} from '../dal/entities/book';
 import {Author} from '../dal/entities/author';
 import {polarisGraphQLLogger} from '../utils/logger';
+import {GraphQLObjectType, GraphQLString} from 'graphql';
+import {Article} from "../dal/entities/article";
+
+const {nodeInterface} = nodeDefinitions(
+    (globalId: string, context: PolarisGraphQLContext) => {
+        const {type, id} = fromGlobalId(globalId);
+        if (type === 'Article') {
+            const connection = getPolarisConnectionManager().get();
+            return connection.getRepository(Article).find(context, {
+                where: {id},
+                relations: ['author'],
+            });
+        }
+    },
+    (obj: any): GraphQLObjectType | undefined => {
+        return obj.headline ? articleType : undefined;
+    }
+);
+
+const articleType = new GraphQLObjectType({
+    name: 'Article',
+    interfaces: [nodeInterface],
+    fields: () => ({
+        id: globalIdField(),
+        headline: {
+            type: GraphQLString,
+        },
+        text: {
+            type: GraphQLString,
+        },
+    }),
+});
+
+const articleConnectionType = connectionDefinitions({
+    name: 'ArticleConnection',
+    nodeType: articleType,
+});
 
 export const resolvers = {
     Query: {
@@ -95,5 +133,7 @@ export const resolvers = {
         fullName(author: Author) {
             return `${author.firstName} ${author.lastName}`;
         },
-    }
+    },
+    // Article: articleType,
+    // ArticleConnection: articleConnectionType,
 };

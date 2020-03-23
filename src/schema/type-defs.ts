@@ -5,7 +5,7 @@ export const typeDefs = gql`
         allBooks: [Book]!
         booksByPartialTitle(title: String!): [Book]!
         allAuthors: [Author]!
-        node(id: String!): Node
+        allArticlesConnection: [ArticleConnection]!
     }
 
     type Mutation {
@@ -40,20 +40,32 @@ export const typeDefs = gql`
         books: [Book]
     }
 
+    # Relay
+
     interface Node {
         id: String!
     }
 
-    type Article implements RepositoryEntity & Node {
+    type Article implements Node {
         id: String!
-        deleted: Boolean!
-        createdBy: String!
-        creationTime: DateTime!
-        lastUpdatedBy: String
-        lastUpdateTime: DateTime
-        realityId: Int!
         headline: String
         text: String
-        author: Author
+    }
+
+    type ArticleConnection {
+      edges: [ArticleEdge]
+      pageInfo: PageInfo!
+    }
+
+    type ArticleEdge {
+      cursor: String!
+      node: Article
+    }
+
+    type PageInfo {
+        hasNextPage: Boolean!
+        hasPreviousPage: Boolean!
+        startCursor: String
+        endCursor: String
     }
 `;
