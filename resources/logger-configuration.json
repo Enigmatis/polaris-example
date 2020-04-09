@@ -1,5 +1,5 @@
 {
-  "loggerLevel": "info",
+  "loggerLevel": "debug",
   "writeToConsole": true,
   "writeFullMessageToConsole": false
 }

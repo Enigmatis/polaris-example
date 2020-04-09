@@ -1,47 +1,34 @@
-import {Book} from "./entities/book";
-import {Author} from "./entities/author";
 import {getPolarisConnectionManager} from "@enigmatis/polaris-core";
+import {Pokemon} from "./entities/pokemon";
+import {Trainer} from "./entities/trainer";
+import {Gender} from "../graphql/resolvers/enums/gender";
 
-async function deleteTables() {
-    const connection = getPolarisConnectionManager().get();
-    const tables = ['book', 'author', 'dataVersion'];
-    for (const table of tables) {
-        if (connection) {
-            await connection.getRepository(table).query('DELETE FROM "' + table + '";');
-        }
-    }
+function getPokemons(): Pokemon[] {
+    return [
+        new Pokemon('pikachu', 2000, 30),
+        new Pokemon('jigglypuff', 1000, 10),
+        new Pokemon('dragonite', 4000, 15)];
 }
 
-function getAuthors(): Author[] {
+function getTrainers(pokemons: Pokemon[]): Trainer[] {
     return [
-        new Author("J.K.", "Rowling", []),
-        new Author("Michael", "Crichton", []),
-    ];
-}
-
-function getBooks(authors: Author[]): Book[] {
-    return [
-        new Book('Harry Potter and the Chamber of Secrets', authors[0]),
-        new Book('Jurassic Park', authors[1]),
-        new Book('Harry Potter and the Philosophers Stone', authors[0]),
-        new Book('Harry Potter and the Goblet of Fire', authors[0]),
+        new Trainer("Ash", "Ketchum", 15, Gender.MALE, 10, [pokemons[0]]),
+        new Trainer("Misty", "Williams", 15, Gender.FEMALE, 5, [pokemons[1]]),
+        new Trainer("Brock", "Harrison", 15, Gender.MALE, 0, [pokemons[2]])
     ]
 }
 
-async function createExampleData(authors: Author[], books: Book[]) {
+async function createExampleData(trainers: Trainer[], pokemons: Pokemon[]) {
     const connection = getPolarisConnectionManager().get();
-    let authorRepo = connection.getRepository(Author);
-    let bookRepo = connection.getRepository(Book);
-    await authorRepo.save({requestHeaders: {realityId: 0}} as any, authors);
-    await bookRepo.save({requestHeaders: {realityId: 0}} as any, [books[0], books[1], books[3]]);
-    await bookRepo.save({requestHeaders: {realityId: 3}} as any, books[2]);
+    let trainerRepo = connection.getRepository(Trainer);
+    let pokemonRepo = connection.getRepository(Pokemon);
+    await trainerRepo.save({requestHeaders: {realityId: 0}} as any, trainers);
+    await pokemonRepo.save({requestHeaders: {realityId: 0}} as any, [pokemons[0], pokemons[1]]);
+    await pokemonRepo.save({requestHeaders: {realityId: 3}} as any, pokemons[2]);
 }
 
 export async function initializeDatabase() {
-    const connection = getPolarisConnectionManager().get();
-    await deleteTables();
-    await connection.synchronize();
-    const authors: Author[] = getAuthors();
-    const books: Book[] = getBooks(authors);
-    await createExampleData(authors, books);
+    const pokemons: Pokemon[] = getPokemons();
+    const trainers: Trainer[] = getTrainers(pokemons);
+    await createExampleData(trainers, pokemons);
 }
