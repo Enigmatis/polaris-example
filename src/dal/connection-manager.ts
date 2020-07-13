@@ -7,7 +7,7 @@ let connectionOptions: ConnectionOptions = {
     entities: [__dirname + '/entities/*.{ts,js}'],
     synchronize: true,
     logging: true,
-    schema: "polaris-example",
+    schema: "example",
     dropSchema: true
 };
 

@@ -26,7 +26,7 @@ let startApp = async () => {
         typeDefs,
         resolvers,
         port: applicationProperties.port,
-        connection: getPolarisConnectionManager().get(),
+        connectionManager: getPolarisConnectionManager(),
         supportedRealities: realitiesHolder,
         validationRules: [depthLimit(2)],
         applicationProperties,
