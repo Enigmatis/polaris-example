@@ -6,7 +6,9 @@ let connectionOptions: ConnectionOptions = {
     url: process.env.CONNECTION_STRING || '',
     entities: [__dirname + '/entities/*.{ts,js}'],
     synchronize: true,
-    logging: true
+    logging: true,
+    schema: "example",
+    dropSchema: true
 };
 
 export async function initConnection() {
