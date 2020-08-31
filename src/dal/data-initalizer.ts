@@ -19,12 +19,12 @@ function getTrainers(pokemons: Pokemon[]): Trainer[] {
 }
 
 async function createExampleData(trainers: Trainer[], pokemons: Pokemon[]) {
-    const connection = getPolarisConnectionManager().get();
+    const connection = getPolarisConnectionManager().get("default");
     let trainerRepo = connection.getRepository(Trainer);
     let pokemonRepo = connection.getRepository(Pokemon);
-    await trainerRepo.save({requestHeaders: {realityId: 0}} as any, trainers);
     await pokemonRepo.save({requestHeaders: {realityId: 0}} as any, [pokemons[0], pokemons[1]]);
     await pokemonRepo.save({requestHeaders: {realityId: 3}} as any, pokemons[2]);
+    await trainerRepo.save({requestHeaders: {realityId: 0}} as any, trainers);
 }
 
 export async function initializeDatabase() {

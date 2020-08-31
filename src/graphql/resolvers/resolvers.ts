@@ -12,7 +12,17 @@ import {Pokemon} from "../../dal/entities/pokemon";
 import {Rarity} from "./enums/rarity";
 import {trainerById} from "./queries/trainer-by-id";
 import {PokemonContext} from "../../utils/pokemon-context";
-import {trainerAdded} from "./subscription/trainer-added";
+import {getPolarisConnectionManager, PolarisGraphQLContext} from "@enigmatis/polaris-core";
+
+const DataLoader = require("dataloader");
+
+const pokemonLoader = new DataLoader(async (keys: any) => {
+    const result = keys.map(async (trainerId: any) => {
+        return getPolarisConnectionManager().get().getRepository(Pokemon).find({} as any, {where: {trainer: {id: trainerId}}});
+    })
+
+    return Promise.resolve(result)
+})
 
 export const resolvers = {
     Query: {
@@ -35,6 +45,9 @@ export const resolvers = {
     Trainer: {
         name: (trainer: Trainer) => `${trainer.firstName} ${trainer.lastName}`,
         age: (trainer: Trainer) => trainer.yearsOnEarth,
+        pokemons:async (trainer: Trainer, args: any, context: PolarisGraphQLContext) => {
+            return pokemonLoader.load(trainer.getId());
+        },
     },
     Pokemon: {
         name: (pokemon: Pokemon, args: any, context: PokemonContext) => {
